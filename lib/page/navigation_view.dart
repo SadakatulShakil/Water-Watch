@@ -11,12 +11,11 @@ class NavigationView extends GetView<NavigationController> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomAppBar(
-        color: Colors.teal.shade50,
+        color: Colors.white,
         shape: const CircularNotchedRectangle(),
         surfaceTintColor: Colors.white,
-        notchMargin: 20,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

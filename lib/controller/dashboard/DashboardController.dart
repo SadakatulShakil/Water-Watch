@@ -1,5 +1,9 @@
-import 'package:get/get.dart';
+import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import '../../models/location model.dart';
 import '../../services/api_urls.dart';
 import '../../services/user_pref_service.dart';
 
@@ -22,6 +26,7 @@ class DashboardController extends GetxController {
   var cLocationUpazila = "".obs;
   var cLocationDistrict = "".obs;
   var isForecastLoading = false.obs;
+  var locations = <LocationModel>[].obs;
   //final dbService = Get.find<DBService>();
 
   @override
@@ -79,8 +84,46 @@ class DashboardController extends GetxController {
       photo.value = "${ApiURL.base_url_image}/assets/auth/default.png"; // Use default image
     }
 
+    fetchLocations();
     print("Current Location ID: ${currentLocationId.value}");
 
   }
+
+  void fetchLocations() async {
+
+    locations.value = [
+      LocationModel(
+       title: 'শেরপুর - সিলেট',
+        subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
+      ),
+      LocationModel(
+          title: 'সুনামগঞ্জ',
+          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
+      ),
+      LocationModel(
+          title: 'হবিগঞ্জ',
+          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
+      ),
+      LocationModel(
+          title: 'মৌলভীবাজার',
+          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
+      ),
+      // Add more predefined locations as needed
+    ]; // Clear previous locations
+
+    // try {
+    //   final response = await http.get(Uri.parse('https://example.com/api/locations'));
+    //
+    //   if (response.statusCode == 200) {
+    //     final List data = json.decode(response.body);
+    //     locations.value = data.map((e) => LocationModel.fromJson(e)).toList();
+    //   } else {
+    //     Get.snackbar("Error", "Failed to load locations");
+    //   }
+    // } catch (e) {
+    //   Get.snackbar("Error", e.toString());
+    // }
+  }
+
 
 }

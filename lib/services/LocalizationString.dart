@@ -100,7 +100,7 @@ class LocalizationString extends Translations {
       'profile_info_email': 'ইমেল এড্রেস',
       'profile_info_address': 'ঠিকানা',
       'profile_info_update_button': 'প্রোফাইল ইনফো হালনাগাদ করুণ',
-      'profile_language_select': 'ভাষা নির্বাচন করুণ',
+      'profile_language_select': 'ভাষা পরিবর্তন',
       'profile_logout': 'লগ আউট',
       'profile_logout_text': 'তুমি কী প্রস্থান করতে চাও? আমাদের আবার দেখা হবে তুমি যখন ফিরে আসবে।',
       'dashboard_sidebar_important_video': 'অ্যাপ ম্যানুয়াল',
