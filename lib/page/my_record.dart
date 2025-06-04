@@ -48,53 +48,49 @@ class MyRecordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/background1.jpg', // Your background image here
-              fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background1.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('আমার রেকর্ড',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
+                ),
+                SizedBox(height: 16),
+                Obx(() => Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => _showYearPicker(context),
+                        child: dropdownBox("বছর নির্বাচন করুন", selectionController.selectedYear.value.toString()),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => _showParameterPicker(context),
+                        child: dropdownBox("প্যারামিটার নির্বাচন করুন", selectionController.selectedParameter.value),
+                      ),
+                    ),
+                  ],
+                )),
+                SizedBox(height: 16),
+              ],
             ),
           ),
-
-          // Foreground Content
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text('আমার রেকর্ড',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
-                  ),
-                  SizedBox(height: 16),
-                  Obx(() => Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => _showYearPicker(context),
-                          child: dropdownBox("বছর নির্বাচন করুন", selectionController.selectedYear.value.toString()),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => _showParameterPicker(context),
-                          child: dropdownBox("প্যারামিটার নির্বাচন করুন", selectionController.selectedParameter.value),
-                        ),
-                      ),
-                    ],
-                  )),
-                  SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -13,12 +13,15 @@ import 'Utills/firebase_option.dart';
 import 'Utills/routes/app_pages.dart';
 import 'Utills/widgets/location_gate.dart';
 import 'controller/mobile/MobileController.dart';
-import 'controller/navigation/navigation_binding.dart'; // Import your DBService
+import 'controller/navigation/navigation_binding.dart';
+import 'controller/settings/settings_controller.dart'; // Import your DBService
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize SharedPreferences
   await UserPrefService().init();
+  Get.put(SettingsController());
+  final savedLang = UserPrefService().appLanguage ?? 'en';
   await LocationService().getLocation();
   // Initialize DBService
   //final dbService = await DBService().init();
@@ -34,13 +37,14 @@ void main() async {
     print('🔥 Location Initialization Error: $e');
     print(stack);
   }
-  runApp(MyApp());
+  runApp(MyApp(savedLang));
 }
 
 class MyApp extends StatelessWidget {
   final MobileController mobileController = Get.put(MobileController());
-  //final SurveyQController surveyController = Get.put(SurveyQController());
   final FirebaseService _firebaseService = FirebaseService();
+  final String savedLang;
+  MyApp(this.savedLang);
   @override
   Widget build(BuildContext context) {
     _firebaseService.initNotifications();
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
       //getPages: AppPages.routes,
       initialBinding: NavigationBinding(),
       translations: LocalizationString(),
-      locale: const Locale('bn', 'BD'),
+      locale: Locale(savedLang),
     );
   }
 }

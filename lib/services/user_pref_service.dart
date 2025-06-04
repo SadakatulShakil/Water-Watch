@@ -26,6 +26,8 @@ class UserPrefService {
   static const String _keyLocationName = 'LOCATION_NAME';
   static const String _keyLocationUpazila = 'LOCATION_UPAZILA';
   static const String _keyLocationDistrict = 'LOCATION_DISTRICT';
+  static const String _keyAppLanguage = 'APP_LANGUAGE';
+
 
   SharedPreferences? _prefs;
 
@@ -137,6 +139,15 @@ class UserPrefService {
   Future<void> updateUserPhoto(String url) async {
   await _prefs?.setString(_keyUserPhoto, url);
   }
+
+  // Save app language
+  Future<void> saveAppLanguage(String languageCode) async {
+    await _prefs?.setString(_keyAppLanguage, languageCode);
+  }
+
+// Load app language
+  String get appLanguage => _prefs?.getString(_keyAppLanguage) ?? 'bn';
+
 
 
   // Get user Token
