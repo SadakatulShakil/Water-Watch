@@ -111,18 +111,6 @@ class DashboardController extends GetxController {
       // Add more predefined locations as needed
     ]; // Clear previous locations
 
-    // try {
-    //   final response = await http.get(Uri.parse('https://example.com/api/locations'));
-    //
-    //   if (response.statusCode == 200) {
-    //     final List data = json.decode(response.body);
-    //     locations.value = data.map((e) => LocationModel.fromJson(e)).toList();
-    //   } else {
-    //     Get.snackbar("Error", "Failed to load locations");
-    //   }
-    // } catch (e) {
-    //   Get.snackbar("Error", e.toString());
-    // }
   }
 
 

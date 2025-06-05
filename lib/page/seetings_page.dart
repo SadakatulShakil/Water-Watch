@@ -68,22 +68,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ],
                   ),
-                  child: Obx(() {
-                    return ToggleButtons(
-                      borderRadius: BorderRadius.circular(10),
-                      fillColor: AppColors().app_primary_bg,
-                      selectedColor: AppColors().app_primary,
-                      color: Colors.black54,
-                      textStyle: TextStyle(fontSize: 12),
-                      isSelected: controller.selectedLanguage,
-                      onPressed: (int index) {
-                        controller.changeLanguage(
-                          index,
-                        ); // no need to call setState
-                      },
-                      children: [Text('EN'), Text('BN')],
-                    );
-                  }),
+                  child: ToggleButtons(
+                    borderRadius: BorderRadius.circular(10),
+                    fillColor: AppColors().app_primary_bg,
+                    selectedColor: AppColors().app_primary,
+                    color: Colors.black54,
+                    textStyle: TextStyle(fontSize: 12),
+                    isSelected: controller.selectedLanguage,
+                    onPressed: (int index) {
+                      controller.changeLanguage(
+                        index,
+                      ); // no need to call setState
+                    },
+                    children: [Text('EN'), Text('BN')],
+                  ),
                 ),
               ),
               Divider(),
