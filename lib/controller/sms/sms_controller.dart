@@ -3,14 +3,33 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../models/location_model.dart';
+import '../../models/parameter_model.dart';
+import '../dashboard/DashboardController.dart';
+
 class SmsController extends GetxController {
-  final selectedStation = 'স্টেশন ১'.obs;
-  final selectedParameter = 'বৃষ্টিপাত'.obs;
+
+  final selectedStation = Rx<LocationModel?>(null);
+  final selectedParameter = Rx<ParameterModel?>(null);
   final selectedDate = DateTime.now().obs;
 
   final timeMeasurements = <Map<String, String>>[].obs;
 
-  SmsController() {
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    final dashboard = Get.find<DashboardController>();
+
+    if (dashboard.locations.isNotEmpty) {
+      selectedStation.value = dashboard.locations.first;
+    }
+
+    if (dashboard.parameters.isNotEmpty) {
+      selectedParameter.value = dashboard.parameters.first;
+    }
+
     addTimeMeasurement(); // Initial row
   }
 
@@ -55,26 +74,40 @@ class SmsController extends GetxController {
   }
 
   void saveRecord() {
-    final String phoneNumber = "01751330394";
+    final station = selectedStation.value;
+    final param = selectedParameter.value;
 
-    final String date = "${selectedDate.value.toLocal()}".split(' ')[0];
-    final String report = timeMeasurements.map((entry) {
+    if (station == null || param == null) {
+      Get.snackbar("Missing Data", "স্টেশন ও প্যারামিটার নির্বাচন করুন");
+      return;
+    }
+
+    // Validate each timeMeasurement entry
+    for (var entry in timeMeasurements) {
+      final time = entry['time']?.trim() ?? '';
+      final measurement = entry['measurement']?.trim() ?? '';
+      if (time.isEmpty || measurement.isEmpty) {
+        Get.snackbar("অপূর্ণ তথ্য", "সময় এবং পরিমাপ পূরণ করুন");
+        return;
+      }
+    }
+
+    final date = "${selectedDate.value.toLocal()}".split(' ')[0];
+    final report = timeMeasurements.map((entry) {
       final time = entry['time'] ?? "";
       final measurement = entry['measurement'] ?? "";
-      return "$time: ${selectedParameter.value} - $measurement মিমি";
+      return "$date: $time: ${param.title} - $measurement মিমি";
     }).join("; ");
 
-    final String message = "তারিখ: $date; রিপোর্ট: $report";
+    final message = "তারিখ: $date\nস্টেশন: ${station.title} (${station.id})\nপ্যারামিটার: ${param.title} (${param.id})\nরিপোর্ট: $report";
 
-    final Uri smsUri = Uri(
+    final smsUri = Uri(
       scheme: 'sms',
-      path: phoneNumber,
-      queryParameters: <String, String>{
-        'body': message,
-      },
+      path: "01751330394",
+      queryParameters: {'body': message},
     );
 
-    print("SMS URI: $smsUri");
-    launchUrl(smsUri);
+    print("SMS URI: $report");
+    // launchUrl(smsUri);
   }
 }

@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:water_watch/models/parameter_model.dart';
 
-import '../../models/location model.dart';
+import '../../models/location_model.dart';
 import '../../services/api_urls.dart';
 import '../../services/user_pref_service.dart';
 
@@ -27,6 +28,7 @@ class DashboardController extends GetxController {
   var cLocationDistrict = "".obs;
   var isForecastLoading = false.obs;
   var locations = <LocationModel>[].obs;
+  var parameters = <ParameterModel>[].obs;
   //final dbService = Get.find<DBService>();
 
   @override
@@ -85,6 +87,7 @@ class DashboardController extends GetxController {
     }
 
     fetchLocations();
+    fetchParameters();
     print("Current Location ID: ${currentLocationId.value}");
 
   }
@@ -94,7 +97,7 @@ class DashboardController extends GetxController {
     locations.value = [
       LocationModel(
         id: '1',
-       title: 'শেরপুর - সিলেট',
+        title: 'শেরপুর - সিলেট',
         subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),
       LocationModel(
@@ -112,8 +115,23 @@ class DashboardController extends GetxController {
           title: 'মৌলভীবাজার',
           subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),
-      // Add more predefined locations as needed
-    ]; // Clear previous locations
+
+    ];
+
+  }
+
+  void fetchParameters() async {
+
+    parameters.value = [
+      ParameterModel(
+          id: '1',
+          title: 'বৃষ্টিপাত',
+      ),
+      ParameterModel(
+          id: '2',
+          title: 'পানির স্তর',
+      ),
+    ];
 
   }
 

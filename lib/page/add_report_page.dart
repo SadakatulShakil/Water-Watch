@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/add_record/add_record_controller.dart';
+import '../controller/dashboard/DashboardController.dart';
+import '../models/parameter_model.dart';
 
 class AddReportPage extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class AddReportPage extends StatefulWidget {
 
 class _AddReportPageState extends State<AddReportPage> {
   final AddRecordController controller = Get.put(AddRecordController());
+  final dashboardController = Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class _AddReportPageState extends State<AddReportPage> {
                     onPressed: () => Get.back(),
                   ),
                   Text(
-                    "${controller.stationTitle}",
+                    "${controller.locationData.title}",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -53,11 +56,12 @@ class _AddReportPageState extends State<AddReportPage> {
                       SizedBox(height: 12),
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
-                        value: controller.selectedParameter.value,
-                        onTap: () => _showBottomSheet(
+                        value: controller.selectedParameter.value?.title ?? '',
+                        onTap: () => _showBottomSheet<ParameterModel>(
                           context,
-                          ["বৃষ্টিপাত", "পানি স্তর"],
+                          dashboardController.parameters,
                           controller.selectedParameter,
+                              (item) => item.title,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -243,16 +247,20 @@ class _AddReportPageState extends State<AddReportPage> {
     );
   }
 
-  void _showBottomSheet(
-      BuildContext context, List<String> items, RxString selectedValue) {
+  void _showBottomSheet<T>(
+      BuildContext context,
+      List<T> items,
+      Rx<T?> selectedValue,
+      String Function(T) getLabel,
+      ) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
+        return ListView(
           children: items.map((item) {
+            final label = getLabel(item);
             return ListTile(
-              title: Text(item),
+              title: Text(label),
               trailing: selectedValue.value == item
                   ? Icon(Icons.check, color: Colors.blue)
                   : null,

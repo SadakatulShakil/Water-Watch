@@ -3,11 +3,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AddRecordController extends GetxController {
-  final stationId = Get.arguments['id'] ?? "";
-  final stationTitle = Get.arguments['title'] ?? "";
+import '../../models/parameter_model.dart';
+import '../dashboard/DashboardController.dart';
 
-  final selectedParameter = 'বৃষ্টিপাত'.obs;
+class AddRecordController extends GetxController {
+  final locationData = Get.arguments['item'];
+  final stationId = Get.arguments['item'].id ?? "";
+  final stationTitle = Get.arguments['item'].title ?? "";
+  final selectedParameter = Rx<ParameterModel?>(null);
+
   final selectedDate = DateTime.now().obs;
 
   RxList<Map<String, String>> timeMeasurements = <Map<String, String>>[].obs;
@@ -16,12 +20,16 @@ class AddRecordController extends GetxController {
   @override
   void onInit() {
     print('Station ID: $stationId, Title: $stationTitle');
+    final dashboard = Get.find<DashboardController>();
+
+    if (dashboard.parameters.isNotEmpty) {
+      selectedParameter.value = dashboard.parameters.first;
+    }
+
+    addTimeMeasurement(); // Initial row
     super.onInit();
   }
 
-  AddRecordController() {
-    addTimeMeasurement(); // Initial row
-  }
 
   void pickDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -62,20 +70,40 @@ class AddRecordController extends GetxController {
       timeMeasurements.remove(item);
     }
   }
-
   void saveRecord() {
-    final String phoneNumber = "01751330394";
+    final param = selectedParameter.value;
 
-    final String date = "${selectedDate.value.toLocal()}".split(' ')[0];
-    final String report = timeMeasurements.map((entry) {
+    if (param == null) {
+      Get.snackbar("Missing Data", "স্টেশন ও প্যারামিটার নির্বাচন করুন");
+      return;
+    }
+
+    // Validate each timeMeasurement entry
+    for (var entry in timeMeasurements) {
+      final time = entry['time']?.trim() ?? '';
+      final measurement = entry['measurement']?.trim() ?? '';
+      if (time.isEmpty || measurement.isEmpty) {
+        Get.snackbar("অপূর্ণ তথ্য", "সময় এবং পরিমাপ পূরণ করুন");
+        return;
+      }
+    }
+
+    final date = "${selectedDate.value.toLocal()}".split(' ')[0];
+    final report = timeMeasurements.map((entry) {
       final time = entry['time'] ?? "";
       final measurement = entry['measurement'] ?? "";
-      return "$time: ${selectedParameter.value} - $measurement মি.মি.";
+      return "$date: $time: ${param.title} - $measurement মিমি #$stationTitle #$stationId";
     }).join("; ");
 
-    final String message = "তারিখ: $date; রিপোর্ট: $report";
+    final message = "তারিখ: $date\nস্টেশন: ${stationTitle} (${stationId})\nপ্যারামিটার: ${param.title} (${param.id})\nরিপোর্ট: $report";
 
-    print("SMS URI: $message");
-    //launchUrl(smsUri);
+    final smsUri = Uri(
+      scheme: 'sms',
+      path: "01751330394",
+      queryParameters: {'body': message},
+    );
+
+    print("SMS URI: $report");
+    // launchUrl(smsUri);
   }
 }

@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class StationRecordController extends GetxController {
-  final stationId = Get.arguments['id'] ?? "";
-  final stationTitle = Get.arguments['title'] ?? "";
+  final locationData = Get.arguments['item'];
+  final stationId = Get.arguments['item'].id ?? "";
+  final stationTitle = Get.arguments['item'].title ?? "";
 
   final selectedParameter = 'বৃষ্টিপাত'.obs;
 

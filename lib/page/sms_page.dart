@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../controller/dashboard/DashboardController.dart';
 import '../controller/sms/sms_controller.dart';
+import '../models/location_model.dart';
+import '../models/parameter_model.dart';
 
 class SmsPage extends StatelessWidget {
   final SmsController controller = Get.put(SmsController());
-
+  final dashboardController = Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +41,23 @@ class SmsPage extends StatelessWidget {
                     children: [
                       buildDropdown(
                         title: "স্টেশন নির্বাচন করুন",
-                        value: controller.selectedStation.value,
-                        onTap: () => _showBottomSheet(
+                        value: controller.selectedStation.value?.title ?? '',
+                        onTap: () => _showBottomSheet<LocationModel>(
                           context,
-                          ["স্টেশন ১", "স্টেশন ২"],
+                          dashboardController.locations,
                           controller.selectedStation,
+                              (item) => item.title,
                         ),
                       ),
                       SizedBox(height: 12),
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
-                        value: controller.selectedParameter.value,
-                        onTap: () => _showBottomSheet(
+                        value: controller.selectedParameter.value?.title ?? '',
+                        onTap: () => _showBottomSheet<ParameterModel>(
                           context,
-                          ["বৃষ্টিপাত", "পানি স্তর"],
+                          dashboardController.parameters,
                           controller.selectedParameter,
+                              (item) => item.title,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -229,15 +234,20 @@ class SmsPage extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context, List<String> items, RxString selectedValue) {
+  void _showBottomSheet<T>(
+      BuildContext context,
+      List<T> items,
+      Rx<T?> selectedValue,
+      String Function(T) getLabel,
+      ) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
+        return ListView(
           children: items.map((item) {
+            final label = getLabel(item);
             return ListTile(
-              title: Text(item),
+              title: Text(label),
               trailing: selectedValue.value == item
                   ? Icon(Icons.check, color: Colors.blue)
                   : null,

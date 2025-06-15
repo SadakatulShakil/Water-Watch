@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart' as lottie;
+import 'package:water_watch/models/location_model.dart';
 import 'package:water_watch/page/station_report_page.dart';
 
 import '../controller/add_record/add_record_binding.dart';
@@ -99,7 +100,7 @@ class DashboardPage extends StatelessWidget {
                       mainAxisSpacing: 12,
                       childAspectRatio: 1.2,
                       children: controller.locations.map((loc) {
-                        return locationCard(loc.id, loc.title, loc.subtitle);
+                        return locationCard(loc);
                       }).toList(),
                     );
                   }),
@@ -112,12 +113,12 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget locationCard(String id, String title, String subtitle) {
+  Widget locationCard(LocationModel location) {
     return GestureDetector(
       onTap: () {
-        print("Tapped on location: $title & $id");
+        print("Tapped on location: ${location.title} & ${location.id}");
         Get.to(StationReportPage(),
-          arguments: {'id': id, 'title': title},
+          arguments: {'item': location},
           transition: Transition.leftToRight);
       },
       child: Container(
@@ -136,14 +137,14 @@ class DashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(subtitle,
+            Text(location.subtitle,
                 style: TextStyle(fontSize: 13, color: Colors.black54)),
             Spacer(),
             Row(
               children: [
                 Expanded(
                   child: Text(
-                    title,
+                    location.title,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),

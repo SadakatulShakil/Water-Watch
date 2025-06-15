@@ -54,7 +54,7 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
                     icon: Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Get.back(),
                   ),
-                  Text("${controller.stationTitle}",
+                  Text("${controller.locationData.title}",
                     style: TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
@@ -64,7 +64,7 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
                       onPressed: () {
                         // Add your button action here
                         Get.to(AddReportPage(),
-                            arguments: {'id': controller.stationId, 'title': controller.stationTitle},
+                            arguments: {'item': controller.locationData},
                             transition: Transition.rightToLeft);
                       },
                       child: Text("Add Data", style: TextStyle(color: Colors.white),),
