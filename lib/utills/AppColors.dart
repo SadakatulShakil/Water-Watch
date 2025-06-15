@@ -2,11 +2,11 @@
 import 'dart:ui';
 
 class AppColors {
-  final app_primary = const Color(0xFF008080);
+  final app_primary = const Color(0xFF000053);
   final app_primary_bg = const Color(0xFFE0F2F1);
 
   final app_secondary = const Color(0xFFFFFFFF);
-  final app_secondary_bg = const Color(0xFFE0F2d1);
+  final app_secondary_bg = const Color(0xFF0077dd);
   final positive_bg = const Color(0xFF14A20A);
 
   final black_font_color = const Color(0xFF000000);

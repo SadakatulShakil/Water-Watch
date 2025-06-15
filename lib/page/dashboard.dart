@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart' as lottie;
+import 'package:water_watch/page/station_report_page.dart';
 
+import '../controller/add_record/add_record_binding.dart';
 import '../controller/dashboard/DashboardController.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -97,7 +99,7 @@ class DashboardPage extends StatelessWidget {
                       mainAxisSpacing: 12,
                       childAspectRatio: 1.2,
                       children: controller.locations.map((loc) {
-                        return locationCard(loc.title, loc.subtitle);
+                        return locationCard(loc.id, loc.title, loc.subtitle);
                       }).toList(),
                     );
                   }),
@@ -110,38 +112,46 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget locationCard(String title, String subtitle) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(subtitle,
-              style: TextStyle(fontSize: 13, color: Colors.black54)),
-          Spacer(),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  Widget locationCard(String id, String title, String subtitle) {
+    return GestureDetector(
+      onTap: () {
+        print("Tapped on location: $title & $id");
+        Get.to(StationReportPage(),
+          arguments: {'id': id, 'title': title},
+          transition: Transition.leftToRight);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.95),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(subtitle,
+                style: TextStyle(fontSize: 13, color: Colors.black54)),
+            Spacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Icon(Icons.arrow_forward_ios, size: 16, color: Colors.blueAccent)
-            ],
-          ),
-        ],
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.blueAccent)
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

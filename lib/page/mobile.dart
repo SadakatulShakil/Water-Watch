@@ -26,10 +26,10 @@ class _MobileState extends State<Mobile> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset( 'assets/logo/bmd_logo.png', height: 96 ),
+              Image.asset( 'assets/logo/bwdb_logo.png', height: 96 ),
               SizedBox(height: 16),
-              Text("LOGIN TO Landslide Report", style: TextStyle( fontSize: 20, fontWeight: FontWeight.w500, ) ),
-              Text("Please Enter the mobile number to login" ),
+              Text("LOGIN", style: TextStyle( fontSize: 20, fontWeight: FontWeight.w500, ) ),
+              Text("Please login safely to your account" ),
               SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 0, right: 30, bottom: 0),
@@ -41,10 +41,10 @@ class _MobileState extends State<Mobile> {
                     border: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: AppColors().app_primary),
+                      borderSide: BorderSide(color: AppColors().app_secondary_bg),
                     ),
                   ),
-                  cursorColor: AppColors().app_primary,
+                  cursorColor: AppColors().app_secondary_bg,
                   keyboardType: TextInputType.number,
                 ),
               ),

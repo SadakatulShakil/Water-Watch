@@ -3,14 +3,23 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SmsController extends GetxController {
-  final selectedStation = 'স্টেশন ১'.obs;
+class AddRecordController extends GetxController {
+  final stationId = Get.arguments['id'] ?? "";
+  final stationTitle = Get.arguments['title'] ?? "";
+
   final selectedParameter = 'বৃষ্টিপাত'.obs;
   final selectedDate = DateTime.now().obs;
 
-  final timeMeasurements = <Map<String, String>>[].obs;
+  RxList<Map<String, String>> timeMeasurements = <Map<String, String>>[].obs;
 
-  SmsController() {
+
+  @override
+  void onInit() {
+    print('Station ID: $stationId, Title: $stationTitle');
+    super.onInit();
+  }
+
+  AddRecordController() {
     addTimeMeasurement(); // Initial row
   }
 
@@ -61,20 +70,12 @@ class SmsController extends GetxController {
     final String report = timeMeasurements.map((entry) {
       final time = entry['time'] ?? "";
       final measurement = entry['measurement'] ?? "";
-      return "$time: ${selectedParameter.value} - $measurement মিমি";
+      return "$time: ${selectedParameter.value} - $measurement মি.মি.";
     }).join("; ");
 
     final String message = "তারিখ: $date; রিপোর্ট: $report";
 
-    final Uri smsUri = Uri(
-      scheme: 'sms',
-      path: phoneNumber,
-      queryParameters: <String, String>{
-        'body': message,
-      },
-    );
-
-    print("SMS URI: $smsUri");
-    launchUrl(smsUri);
+    print("SMS URI: $message");
+    //launchUrl(smsUri);
   }
 }

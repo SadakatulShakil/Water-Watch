@@ -93,18 +93,22 @@ class DashboardController extends GetxController {
 
     locations.value = [
       LocationModel(
+        id: '1',
        title: 'শেরপুর - সিলেট',
         subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),
       LocationModel(
+          id: '2',
           title: 'সুনামগঞ্জ',
           subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),
       LocationModel(
+          id: '3',
           title: 'হবিগঞ্জ',
           subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),
       LocationModel(
+          id: '4',
           title: 'মৌলভীবাজার',
           subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
       ),

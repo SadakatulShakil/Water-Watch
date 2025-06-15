@@ -30,7 +30,7 @@ class _OtpState extends State<Otp> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset( 'assets/logo/bmd_logo.png', height: 96 ),
+              Image.asset( 'assets/logo/bwdb_logo.png', height: 96 ),
               SizedBox(height: 16),
               Text("OTP VERIFICATION", style: TextStyle( fontSize: 20, fontWeight: FontWeight.w700, ) ),
               Text("Enter the OTP sent to: ${controller.mobile}" ),

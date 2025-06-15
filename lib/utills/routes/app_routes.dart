@@ -19,6 +19,7 @@ abstract class Routes {
   static const COMMUNITY_POST_ADD = _Paths.COMMUNITY_POST_ADD;
   static const COMMUNITY_POST_MY = _Paths.COMMUNITY_POST_MY;
   static const TASK_REMINDER_DETAIL = _Paths.TASK_REMINDER_DETAIL;
+  static const ADD_RECORD = _Paths.ADD_RECORD;
 }
 
 abstract class _Paths {
@@ -39,4 +40,5 @@ abstract class _Paths {
   static const COMMUNITY_POST_ADD = '/community-post-add';
   static const COMMUNITY_POST_MY = '/community-post-my';
   static const TASK_REMINDER_DETAIL = '/task-reminder-detail';
+  static const ADD_RECORD = '/add-record';
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../controller/sms/sms_controller.dart';
+import '../controller/add_record/add_record_controller.dart';
 
-class SmsPage extends StatelessWidget {
-  final SmsController controller = Get.put(SmsController());
+class AddReportPage extends StatefulWidget {
+  @override
+  State<AddReportPage> createState() => _AddReportPageState();
+}
 
+class _AddReportPageState extends State<AddReportPage> {
+  final AddRecordController controller = Get.put(AddRecordController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +26,21 @@ class SmsPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 16),
-              Text(
-                'এসএমএস পাঠান',
-                style: TextStyle(
-                    fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () => Get.back(),
+                  ),
+                  Text(
+                    "${controller.stationTitle}",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 16),
               Expanded(
@@ -36,15 +50,6 @@ class SmsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildDropdown(
-                        title: "স্টেশন নির্বাচন করুন",
-                        value: controller.selectedStation.value,
-                        onTap: () => _showBottomSheet(
-                          context,
-                          ["স্টেশন ১", "স্টেশন ২"],
-                          controller.selectedStation,
-                        ),
-                      ),
                       SizedBox(height: 12),
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
@@ -57,14 +62,17 @@ class SmsPage extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       Text("তারিখ নির্বাচন করুন",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                       Text("ডিফল্ট আজকের তারিখ দেখায়; গত ৭ দিন পর্যন্ত সামঞ্জস্য করুন।"),
                       SizedBox(height: 8),
                       GestureDetector(
                         onTap: () => controller.pickDate(context),
                         child: buildDropdown(
                           title: "তারিখ নির্বাচন করুন",
-                          value: "${controller.selectedDate.value.toLocal()}".split(' ')[0],
+                          value:
+                          "${controller.selectedDate.value.toLocal()}"
+                              .split(' ')[0],
                         ),
                       ),
                       SizedBox(height: 16),
@@ -181,10 +189,13 @@ class SmsPage extends StatelessWidget {
                       Center(
                         child: ElevatedButton(
                           onPressed: () => controller.saveRecord(),
-                          child: Text("এসএমএস পাঠান", style: TextStyle(fontSize: 16, color: Colors.white)),
+                          child: Text("রেকর্ড পাঠান",
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.white)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue.shade900,
-                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 16),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)),
                           ),
@@ -201,8 +212,11 @@ class SmsPage extends StatelessWidget {
     );
   }
 
-
-  Widget buildDropdown({required String title, required String value, VoidCallback? onTap}) {
+  Widget buildDropdown({
+    required String title,
+    required String value,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -229,7 +243,8 @@ class SmsPage extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context, List<String> items, RxString selectedValue) {
+  void _showBottomSheet(
+      BuildContext context, List<String> items, RxString selectedValue) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
@@ -251,5 +266,4 @@ class SmsPage extends StatelessWidget {
       },
     );
   }
-
 }
