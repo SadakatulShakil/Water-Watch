@@ -1,14 +1,18 @@
-// import 'package:floor/floor.dart';
-// import 'dart:async';
-// import 'dart:convert';
-// import 'package:sqflite/sqflite.dart' as sqflite;
-//
-// part 'database.g.dart';
-//
-// @Database(version: 1, entities: [PostEntity, CommentEntity, SurveyQuestionEntity, SurveyEntity])
-// abstract class AppDatabase extends FloorDatabase {
-//   PostDao get postDao;
-//   CommentDao get commentDao;
-//   SurveyQuestionDao get surveyQuestionDao;
-//   SurveyDao get surveyDao;
-// }
+import 'package:floor/floor.dart';
+import 'package:water_watch/database_helper/dao/parameter_dao.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
+import 'dart:async';
+import 'dao/location_dao.dart';
+import 'dao/record_dao.dart';
+import 'entity/local_location_entity.dart';
+import 'entity/local_parameter_entity.dart';
+import 'entity/record_entity.dart';
+
+part 'database.g.dart';
+
+@Database(version: 1, entities: [LocationEntity, ParameterEntity, RecordEntity])
+abstract class AppDatabase extends FloorDatabase {
+  LocationDao get locationDao;
+  ParameterDao get parameterDao;
+  RecordDao get recordDao;
+}

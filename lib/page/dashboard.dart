@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart' as lottie;
+import 'package:water_watch/database_helper/entity/local_location_entity.dart';
 import 'package:water_watch/models/location_model.dart';
 import 'package:water_watch/page/station_report_page.dart';
 
@@ -113,7 +114,7 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget locationCard(LocationModel location) {
+  Widget locationCard(LocationEntity location) {
     return GestureDetector(
       onTap: () {
         print("Tapped on location: ${location.title} & ${location.id}");

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:water_watch/database_helper/entity/local_parameter_entity.dart';
+
 import '../controller/add_record/add_record_controller.dart';
 import '../controller/dashboard/DashboardController.dart';
-import '../models/parameter_model.dart';
 
 class AddReportPage extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class _AddReportPageState extends State<AddReportPage> {
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
                         value: controller.selectedParameter.value?.title ?? '',
-                        onTap: () => _showBottomSheet<ParameterModel>(
+                        onTap: () => _showBottomSheet<ParameterEntity>(
                           context,
                           dashboardController.parameters,
                           controller.selectedParameter,
@@ -189,6 +190,58 @@ class _AddReportPageState extends State<AddReportPage> {
                         },
                       ),
 
+                      Text("ছবি আপলোড করুন (সর্বোচ্চ ৩টি)"),
+                      SizedBox(height: 8),
+                      Obx(() => Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: [
+                          ...controller.selectedImages.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final file = entry.value;
+
+                            return Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    file,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () => controller.removeImage(index),
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.red,
+                                      child: Icon(Icons.close, size: 16, color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          }).toList(),
+                          if (controller.selectedImages.length < 3)
+                            GestureDetector(
+                              onTap: () => controller.pickImage(),
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.grey.shade200,
+                                ),
+                                child: Icon(Icons.add_a_photo, color: Colors.grey.shade700),
+                              ),
+                            )
+                        ],
+                      )),
                       SizedBox(height: 24),
                       Center(
                         child: ElevatedButton(

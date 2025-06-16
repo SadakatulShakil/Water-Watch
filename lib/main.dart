@@ -14,7 +14,8 @@ import 'Utills/routes/app_pages.dart';
 import 'Utills/widgets/location_gate.dart';
 import 'controller/mobile/MobileController.dart';
 import 'controller/navigation/navigation_binding.dart';
-import 'controller/settings/settings_controller.dart'; // Import your DBService
+import 'controller/settings/settings_controller.dart';
+import 'database_helper/db_service.dart'; // Import your DBService
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +25,8 @@ void main() async {
   final savedLang = UserPrefService().appLanguage ?? 'en';
   await LocationService().getLocation();
   // Initialize DBService
-  //final dbService = await DBService().init();
-  //Get.put(dbService, permanent: true); // Add DBService with permanent flag
+  final dbService = await DBService().init();
+  Get.put(dbService, permanent: true); // Add DBService with permanent flag
 
   try {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {

@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:water_watch/database_helper/entity/local_location_entity.dart';
+import 'package:water_watch/database_helper/entity/local_parameter_entity.dart';
 import 'package:water_watch/models/parameter_model.dart';
 
+import '../../database_helper/db_service.dart';
 import '../../models/location_model.dart';
 import '../../services/api_urls.dart';
 import '../../services/user_pref_service.dart';
@@ -27,9 +30,9 @@ class DashboardController extends GetxController {
   var cLocationUpazila = "".obs;
   var cLocationDistrict = "".obs;
   var isForecastLoading = false.obs;
-  var locations = <LocationModel>[].obs;
-  var parameters = <ParameterModel>[].obs;
-  //final dbService = Get.find<DBService>();
+  var locations = <LocationEntity>[].obs;
+  var parameters = <ParameterEntity>[].obs;
+  final dbService = Get.find<DBService>();
 
   @override
   void onInit() {
@@ -93,47 +96,62 @@ class DashboardController extends GetxController {
   }
 
   void fetchLocations() async {
-
-    locations.value = [
-      LocationModel(
-        id: '1',
-        title: 'শেরপুর - সিলেট',
-        subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
-      ),
-      LocationModel(
-          id: '2',
-          title: 'সুনামগঞ্জ',
-          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
-      ),
-      LocationModel(
-          id: '3',
-          title: 'হবিগঞ্জ',
-          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
-      ),
-      LocationModel(
-          id: '4',
-          title: 'মৌলভীবাজার',
-          subtitle: 'তথ্য দেখুন ও যুক্ত করুন'
-      ),
-
-    ];
-
+    try {
+      /// Try API fetch first
+      //final response = await http.get(Uri.parse("${ApiURL.base_url}/locations"));
+      // if (response.statusCode == 200) {
+      //   final List<dynamic> data = jsonDecode(response.body);
+      //   final fetched = data.map((item) => LocationEntity.fromJson(item)).toList();
+      //
+      //   // Save to local DB
+      //   await dbService.saveLocations(fetched);
+      //   locations.value = fetched;
+      // }
+      if (locations.isEmpty) {
+        final fetched = [
+          LocationEntity(id: '1', title: 'শেরপুর - সিলেট', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '2', title: 'সুনামগঞ্জ', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '3', title: 'হবিগঞ্জ', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '4', title: 'মৌলভীবাজার', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
+        ];
+        await dbService.saveLocations(fetched);
+        locations.value = fetched;
+      }
+      else {
+        // If API fails, fallback to local DB
+        locations.value = await dbService.loadLocations();
+      }
+    } catch (e) {
+      // In case of offline or error, load local DB
+      locations.value = await dbService.loadLocations();
+    }
   }
 
   void fetchParameters() async {
-
-    parameters.value = [
-      ParameterModel(
-          id: '1',
-          title: 'বৃষ্টিপাত',
-      ),
-      ParameterModel(
-          id: '2',
-          title: 'পানির স্তর',
-      ),
-    ];
-
+    try {
+      /// Try API fetch first
+      // final response = await http.get(Uri.parse("${ApiURL.base_url}/parameters"));
+      // if (response.statusCode == 200) {
+      //   final List<dynamic> data = jsonDecode(response.body);
+      //   final fetched = data.map((item) => ParameterEntity.fromJson(item)).toList();
+      //
+      //   // Save to local DB
+      //   await dbService.saveParameters(fetched);
+      //   parameters.value = fetched;
+      // }
+      if (parameters.isEmpty) {
+        final fetched = [
+          ParameterEntity(id: '1', title: 'বৃষ্টিপাত'),
+          ParameterEntity(id: '2', title: 'পানির স্তর'),
+        ];
+        await dbService.saveParameters(fetched);
+        parameters.value = fetched;
+      } else {
+        parameters.value = await dbService.loadParameters();
+      }
+    } catch (e) {
+      parameters.value = await dbService.loadParameters();
+    }
   }
-
 
 }

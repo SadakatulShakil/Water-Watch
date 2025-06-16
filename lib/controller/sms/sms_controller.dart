@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:water_watch/database_helper/entity/local_location_entity.dart';
+import 'package:water_watch/database_helper/entity/local_parameter_entity.dart';
 
 import '../../models/location_model.dart';
 import '../../models/parameter_model.dart';
@@ -9,8 +11,8 @@ import '../dashboard/DashboardController.dart';
 
 class SmsController extends GetxController {
 
-  final selectedStation = Rx<LocationModel?>(null);
-  final selectedParameter = Rx<ParameterModel?>(null);
+  final selectedStation = Rx<LocationEntity?>(null);
+  final selectedParameter = Rx<ParameterEntity?>(null);
   final selectedDate = DateTime.now().obs;
 
   final timeMeasurements = <Map<String, String>>[].obs;
@@ -31,6 +33,7 @@ class SmsController extends GetxController {
     }
 
     addTimeMeasurement(); // Initial row
+    super.onInit();
   }
 
   void pickDate(BuildContext context) async {

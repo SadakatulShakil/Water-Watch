@@ -56,6 +56,8 @@ dependencies:
   flutter_local_notifications: ^19.2.1
 
 dev_dependencies:
+  floor_generator: ^1.4.0
+  build_runner: ^2.4.6
   flutter_test:
     sdk: flutter
 

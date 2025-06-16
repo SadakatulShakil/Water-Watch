@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:water_watch/database_helper/entity/local_location_entity.dart';
+import 'package:water_watch/database_helper/entity/local_parameter_entity.dart';
+
 import '../controller/dashboard/DashboardController.dart';
 import '../controller/sms/sms_controller.dart';
-import '../models/location_model.dart';
-import '../models/parameter_model.dart';
 
-class SmsPage extends StatelessWidget {
+class SmsPage extends StatefulWidget {
+  @override
+  State<SmsPage> createState() => _SmsPageState();
+}
+
+class _SmsPageState extends State<SmsPage> {
   final SmsController controller = Get.put(SmsController());
+
   final dashboardController = Get.find<DashboardController>();
 
   @override
@@ -42,7 +48,7 @@ class SmsPage extends StatelessWidget {
                       buildDropdown(
                         title: "স্টেশন নির্বাচন করুন",
                         value: controller.selectedStation.value?.title ?? '',
-                        onTap: () => _showBottomSheet<LocationModel>(
+                        onTap: () => _showBottomSheet<LocationEntity>(
                           context,
                           dashboardController.locations,
                           controller.selectedStation,
@@ -53,7 +59,7 @@ class SmsPage extends StatelessWidget {
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
                         value: controller.selectedParameter.value?.title ?? '',
-                        onTap: () => _showBottomSheet<ParameterModel>(
+                        onTap: () => _showBottomSheet<ParameterEntity>(
                           context,
                           dashboardController.parameters,
                           controller.selectedParameter,
@@ -206,8 +212,11 @@ class SmsPage extends StatelessWidget {
     );
   }
 
-
-  Widget buildDropdown({required String title, required String value, VoidCallback? onTap}) {
+  Widget buildDropdown({
+    required String title,
+    required String value,
+    VoidCallback? onTap
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -261,5 +270,4 @@ class SmsPage extends StatelessWidget {
       },
     );
   }
-
 }

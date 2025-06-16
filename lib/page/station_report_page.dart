@@ -5,8 +5,10 @@ import 'package:water_watch/controller/add_record/add_record_controller.dart';
 import 'package:water_watch/page/add_report_page.dart';
 import 'package:water_watch/page/graphical_page.dart';
 import 'package:water_watch/page/history_page.dart';
+import '../controller/dashboard/DashboardController.dart';
 import '../controller/sms/sms_controller.dart';
 import '../controller/station_report/station_record_controller.dart';
+import '../database_helper/entity/local_parameter_entity.dart';
 
 class StationReportPage extends StatefulWidget {
   final int tabIndex;
@@ -17,6 +19,7 @@ class StationReportPage extends StatefulWidget {
 
 class _StationReportPageState extends State<StationReportPage> with SingleTickerProviderStateMixin {
   final StationRecordController controller = Get.put(StationRecordController());
+  final dashboardController = Get.find<DashboardController>();
   late TabController _tabController;
 
   @override
@@ -82,15 +85,16 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
               SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: buildDropdown(
+                child: Obx(() => buildDropdown(
                   title: "প্যারামিটার নির্বাচন করুন",
-                  value: controller.selectedParameter.value,
-                  onTap: () => _showBottomSheet(
+                  value: controller.selectedParameter.value?.title ?? '',
+                  onTap: () => _showBottomSheet<ParameterEntity>(
                     context,
-                    ["বৃষ্টিপাত", "পানি স্তর"],
+                    dashboardController.parameters,
                     controller.selectedParameter,
+                        (item) => item.title,
                   ),
-                ),
+                )),
               ),
 
               // Add TabBar
@@ -141,7 +145,7 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    Center(child: HistoryPage()), // Replace with your actual widgets
+                    Center(child: HistoryPage(parameterId: controller.selectedParameter.value?.id ?? ''),), // Replace with your actual widgets
                     Center(child: GraphicalPage()),
                   ],
                 ),
@@ -180,15 +184,20 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
     );
   }
 
-  void _showBottomSheet(BuildContext context, List<String> items, RxString selectedValue) {
+  void _showBottomSheet<T>(
+      BuildContext context,
+      List<T> items,
+      Rx<T?> selectedValue,
+      String Function(T) getLabel,
+      ) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
+        return ListView(
           children: items.map((item) {
+            final label = getLabel(item);
             return ListTile(
-              title: Text(item),
+              title: Text(label),
               trailing: selectedValue.value == item
                   ? Icon(Icons.check, color: Colors.blue)
                   : null,
