@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:water_watch/database_helper/entity/local_parameter_entity.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -146,15 +147,18 @@ class AddRecordController extends GetxController {
     }
 
     // Check for 15-minute gaps
-    final sortedTimes = timeMeasurements.map((e) => e['time']).toList()
-      ..sort((a, b) => a!.compareTo(b!));
+    final parsedTimes = timeMeasurements
+        .map((e) => _parseTime(e['time'] ?? ''))
+        .whereType<DateTime>()
+        .toList()
+      ..sort((a, b) => a.compareTo(b)); // Explicit sorting
 
-    for (int i = 1; i < sortedTimes.length; i++) {
-      final t1 = _parseTime(sortedTimes[i - 1]!);
-      final t2 = _parseTime(sortedTimes[i]!);
-      if (t1 == null || t2 == null) continue;
+    print("Parsed times: $parsedTimes"); // Debug print
 
-      final diff = t2.difference(t1).inMinutes;
+    for (int i = 1; i < parsedTimes.length; i++) {
+      final diff = parsedTimes[i].difference(parsedTimes[i - 1]).inMinutes;
+      print("Time difference between ${parsedTimes[i-1]} and ${parsedTimes[i]}: $diff minutes"); // Debug print
+
       if (diff < 15) {
         Get.snackbar("সময় খুব কাছাকাছি", "প্রতিটি রেকর্ডের মাঝে কমপক্ষে ১৫ মিনিট ব্যবধান রাখুন");
         return;
@@ -195,19 +199,46 @@ class AddRecordController extends GetxController {
 
     selectedImages.clear();
     timeMeasurements.clear();
-    addTimeMeasurement(); // add one row
+    timeMeasurements.add({'time': '', 'measurement': ''}); // Add fresh empty row
+    timeMeasurements.refresh();
   }
 
+  /// parse date time from string
   DateTime? _parseTime(String timeStr) {
     try {
-      final parts = timeStr.split(":");
-      final hour = int.parse(parts[0]);
-      final minute = int.parse(parts[1]);
-      return DateTime(0, 1, 1, hour, minute);
+      // Clean the string by replacing non-breaking spaces with regular spaces
+      final cleanedTimeStr = timeStr.replaceAll(' ', ' ').trim();
+
+      // Try parsing with both 12-hour and 24-hour formats
+      final formats = [
+        DateFormat.jm(),  // 12-hour format (4:32 PM)
+        DateFormat.Hm(),  // 24-hour format (16:32)
+      ];
+
+      for (final format in formats) {
+        try {
+          final time = format.parse(cleanedTimeStr);
+          // Combine with selected date
+          return DateTime(
+            selectedDate.value.year,
+            selectedDate.value.month,
+            selectedDate.value.day,
+            time.hour,
+            time.minute,
+          );
+        } catch (e) {
+          // Try next format
+          continue;
+        }
+      }
+
+      // If all formats fail
+      print('Failed to parse time: $timeStr');
+      return null;
     } catch (e) {
+      print('Error parsing time: $e');
       return null;
     }
   }
-
 
 }

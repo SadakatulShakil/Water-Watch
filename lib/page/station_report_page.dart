@@ -64,11 +64,14 @@ class _StationReportPageState extends State<StationReportPage> with SingleTicker
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Add your button action here
-                        Get.to(AddReportPage(),
+                        final result = await Get.to(AddReportPage(),
                             arguments: {'item': controller.locationData},
                             transition: Transition.rightToLeft);
+                        if (result == 'refresh') {
+                          controller.onRefresh();
+                        }
                       },
                       child: Text("Add Data", style: TextStyle(color: Colors.white),),
                       style: ElevatedButton.styleFrom(

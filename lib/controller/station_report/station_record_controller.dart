@@ -67,4 +67,37 @@ class StationRecordController extends GetxController {
     final records = groupedRecordsByDate[date] ?? [];
     return records.every((r) => r.isSynced);
   }
+
+  void onRefresh() {
+    final dashboard = Get.find<DashboardController>();
+    if (dashboard.parameters.isNotEmpty) {
+      selectedParameter.value = dashboard.parameters.first;
+    }
+
+    if (selectedParameter.value != null) {
+      loadRecords(); // Load initially
+    }
+
+    ever(selectedParameter, (_) {
+      loadRecords(); // Reload when parameter changes
+    });
+  }
+
+  syncRecords(String date) {
+    // final records = groupedRecordsByDate[date] ?? [];
+    // if (records.isEmpty) return;
+    //
+    // // Call the sync method from DBService
+    // dbService.syncRecords(records).then((_) {
+    //   // After successful sync, update the records to mark them as synced
+    //   for (var record in records) {
+    //     record.isSynced = true;
+    //   }
+    //   // Refresh the grouped records
+    //   loadRecords();
+    // }).catchError((error) {
+    //   print("Sync failed: $error");
+    // });
+    print("Syncing records for date: $date");
+  }
 }

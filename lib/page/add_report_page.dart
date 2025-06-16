@@ -34,7 +34,7 @@ class _AddReportPageState extends State<AddReportPage> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () => Get.back(),
+                    onPressed: () => Get.back(result: 'refresh'),
                   ),
                   Text(
                     "${controller.locationData.title}",
@@ -112,6 +112,7 @@ class _AddReportPageState extends State<AddReportPage> {
                                 Expanded(
                                   flex: 3,
                                   child: TextField(
+                                    controller: TextEditingController(text: item['measurement'] ?? ''),
                                     onChanged: (v) =>
                                         controller.updateMeasurementByItem(
                                             item, v),
