@@ -112,24 +112,18 @@ class _AddReportPageState extends State<AddReportPage> {
                                 Expanded(
                                   flex: 3,
                                   child: TextField(
-                                    controller: TextEditingController(text: item['measurement'] ?? ''),
-                                    onChanged: (v) =>
-                                        controller.updateMeasurementByItem(
-                                            item, v),
+                                    controller: controller.measurementControllers[item],
+                                    onChanged: (v) => controller.updateMeasurementByItem(item, v),
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       hintText: "পরিমাপ (মিমি)",
-                                      hintStyle: TextStyle(
-                                          color: Colors.grey.shade600),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(12),
-                                      ),
-                                      contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 5),
+                                      hintStyle: TextStyle(color: Colors.grey.shade600),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
                                     ),
                                   ),
                                 ),
+
                                 SizedBox(width: 8),
 
                                 // Delete icon (only for last row)

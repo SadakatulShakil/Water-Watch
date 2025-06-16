@@ -19,6 +19,7 @@ class AddRecordController extends GetxController {
   final selectedDate = DateTime.now().obs;
   final dbService = Get.find<DBService>();
   final timeMeasurements = <Map<String, String>>[].obs;
+  final Map<Map<String, String>, TextEditingController> measurementControllers = {};
 
 
   @override
@@ -66,11 +67,16 @@ class AddRecordController extends GetxController {
   }
 
   void addTimeMeasurement() {
-    timeMeasurements.add({'time': '', 'measurement': ''});
+    final item = {'time': '', 'measurement': ''};
+    timeMeasurements.add(item);
+    measurementControllers[item] = TextEditingController();
   }
+
 
   void removeTimeMeasurementByItem(Map<String, String> item) {
     if (timeMeasurements.length > 1) {
+      measurementControllers[item]?.dispose();
+      measurementControllers.remove(item);
       timeMeasurements.remove(item);
     }
   }
@@ -198,9 +204,19 @@ class AddRecordController extends GetxController {
     Get.snackbar("সফল", "রিপোর্ট সফলভাবে সংরক্ষিত হয়েছে (অফলাইনে)");
 
     selectedImages.clear();
+    // Dispose old controllers
+    measurementControllers.values.forEach((c) => c.dispose());
+    measurementControllers.clear();
     timeMeasurements.clear();
-    timeMeasurements.add({'time': '', 'measurement': ''}); // Add fresh empty row
-    timeMeasurements.refresh();
+
+    addTimeMeasurement();
+
+  }
+
+  @override
+  void onClose() {
+    measurementControllers.values.forEach((c) => c.dispose());
+    super.onClose();
   }
 
   /// parse date time from string
