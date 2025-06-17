@@ -19,7 +19,7 @@ class AddRecordController extends GetxController {
   final selectedDate = DateTime.now().obs;
   final dbService = Get.find<DBService>();
   final timeMeasurements = <Map<String, String>>[].obs;
-  final Map<Map<String, String>, TextEditingController> measurementControllers = {};
+  final Map<Map<String, String>, TextEditingController> measurementControllers = {};/// controller for each measurement input
 
 
   @override
@@ -69,15 +69,15 @@ class AddRecordController extends GetxController {
   void addTimeMeasurement() {
     final item = {'time': '', 'measurement': ''};
     timeMeasurements.add(item);
-    measurementControllers[item] = TextEditingController();
+    measurementControllers[item] = TextEditingController();// create a new controller for this item
   }
 
 
   void removeTimeMeasurementByItem(Map<String, String> item) {
     if (timeMeasurements.length > 1) {
-      measurementControllers[item]?.dispose();
-      measurementControllers.remove(item);
-      timeMeasurements.remove(item);
+      measurementControllers[item]?.dispose();// dispose the controller
+      measurementControllers.remove(item);// remove the controller
+      timeMeasurements.remove(item);// remove the item
     }
   }
 
@@ -205,7 +205,9 @@ class AddRecordController extends GetxController {
 
     selectedImages.clear();
     // Dispose old controllers
-    measurementControllers.values.forEach((c) => c.dispose());
+    for (var c in measurementControllers.values) {
+      c.dispose();
+    }
     measurementControllers.clear();
     timeMeasurements.clear();
 

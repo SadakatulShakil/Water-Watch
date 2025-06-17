@@ -17,7 +17,7 @@ class DBService extends GetxService {
 
   Future<DBService> init() async {
     _database = await $FloorAppDatabase
-        .databaseBuilder('offlinewww.db')
+        .databaseBuilder('offlinewwe.db')
         .build();
     return this;
   }
@@ -50,8 +50,9 @@ class DBService extends GetxService {
     await _database.recordDao.deleteRecord(record);
   }
 
-  Future<List<String>> loadRecordsByDate() async {
-    return await _database.recordDao.getAllRecordDates();
+  Future<List<RecordEntity>> loadRecordsByDateAndParam(String year, String paramId) async {
+    print('check loadRecordsByDateAndParam: $year, $paramId');
+    return await _database.recordDao.getRecordsByYearAndParam(year, paramId);
   }
 
   Future<List<RecordEntity>> loadRecordsByStationAndParameter(String stationId, String parameterId) async {

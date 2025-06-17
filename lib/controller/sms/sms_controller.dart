@@ -111,6 +111,6 @@ class SmsController extends GetxController {
     );
 
     print("SMS URI: $report");
-    // launchUrl(smsUri);
+    launchUrl(smsUri);
   }
 }

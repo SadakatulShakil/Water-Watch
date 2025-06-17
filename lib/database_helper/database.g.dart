@@ -271,9 +271,14 @@ class _$RecordDao extends RecordDao {
   }
 
   @override
-  Future<List<String>> getAllRecordDates() async {
-    return _queryAdapter.queryList('SELECT DISTINCT date FROM record_entity',
-        mapper: (Map<String, Object?> row) => row.values.first as String);
+  Future<List<RecordEntity>> getRecordsByYearAndParam(
+    String year,
+    String paramId,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM record_entity    WHERE strftime(\'%Y\', date) = ?1      AND parameterId = ?2   ORDER BY date DESC, time ASC',
+        mapper: (Map<String, Object?> row) => RecordEntity(id: row['id'] as int?, date: row['date'] as String, time: row['time'] as String, locationId: row['locationId'] as String, locationName: row['locationName'] as String, parameterId: row['parameterId'] as String, parameterName: row['parameterName'] as String, measurement: row['measurement'] as String, image1Path: row['image1Path'] as String, image2Path: row['image2Path'] as String?, image3Path: row['image3Path'] as String?, isSynced: (row['isSynced'] as int) != 0),
+        arguments: [year, paramId]);
   }
 
   @override

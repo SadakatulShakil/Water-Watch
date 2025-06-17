@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:water_watch/page/profile_page.dart';
 
 import '../Utills/AppColors.dart';
 import '../controller/settings/settings_controller.dart';
@@ -45,6 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 trailing: Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // Navigate to profile page
+                  Get.to(() => ProfilePage());
                 },
               ),
               Divider(),

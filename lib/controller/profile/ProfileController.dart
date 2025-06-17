@@ -48,6 +48,7 @@ class ProfileController extends GetxController with GetSingleTickerProviderState
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
 
   @override
   void onInit() {
@@ -77,10 +78,12 @@ class ProfileController extends GetxController with GetSingleTickerProviderState
       photo.value = "${ApiURL.base_url_image}/assets/auth/default.png"; // Use default image
     }
 
+    print('userMobile: ${mobile.value}');
 
     nameController.text = name.value;
     emailController.text = email.value;
     addressController.text = address.value;
+    mobileController.text = mobile.value == '' ? '01751330394' : mobile.value;
   }
 
   @override

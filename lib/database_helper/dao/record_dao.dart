@@ -10,8 +10,13 @@ abstract class RecordDao {
   @Query('SELECT * FROM record_entity WHERE date = :date')
   Future<List<RecordEntity>> getRecordsByDate(String date);
 
-  @Query('SELECT DISTINCT date FROM record_entity')
-  Future<List<String>> getAllRecordDates();
+  @Query('''SELECT * FROM record_entity 
+  WHERE strftime('%Y', date) = :year 
+    AND parameterId = :paramId
+  ORDER BY date DESC, time ASC
+''')
+  Future<List<RecordEntity>> getRecordsByYearAndParam(String year, String paramId);
+
 
   @Query('SELECT * FROM record_entity')
   Future<List<RecordEntity>> getAllRecords();

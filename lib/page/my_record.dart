@@ -2,11 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:water_watch/controller/my_record/my_record_conttroller.dart';
 import '../Utills/AppColors.dart';
+import '../controller/dashboard/DashboardController.dart';
+import '../database_helper/entity/local_parameter_entity.dart';
+import '../database_helper/entity/record_entity.dart';
 
-class MyRecordPage extends StatelessWidget {
-  final selectionController = Get.put(MyRecordController());
+class MyRecordPage extends StatefulWidget {
 
   MyRecordPage({super.key});
+
+  @override
+  State<MyRecordPage> createState() => _MyRecordPageState();
+}
+
+class _MyRecordPageState extends State<MyRecordPage> {
+  final controller = Get.put(MyRecordController());
+  final dashboardController = Get.find<DashboardController>();
+  final _expandedDates = <String>{};
 
   void _showYearPicker(BuildContext context) {
     final controller = Get.find<MyRecordController>();
@@ -27,25 +38,35 @@ class MyRecordPage extends StatelessWidget {
     );
   }
 
-  void _showParameterPicker(BuildContext context) {
-    final controller = Get.find<MyRecordController>();
+  void _showBottomSheet<T>(
+      BuildContext context,
+      List<T> items,
+      Rx<T?> selectedValue,
+      String Function(T) getLabel,
+      ) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: controller.parameters.map((param) {
-          final isSelected = param == controller.selectedParameter.value;
-          return ListTile(
-            title: Text(param),
-            trailing: isSelected ? Icon(Icons.check, color: Colors.teal) : null,
-            onTap: () => controller.selectParameter(param),
-          );
-        }).toList(),
-      ),
+      builder: (_) {
+        return ListView(
+          children: items.map((item) {
+            final label = getLabel(item);
+            return ListTile(
+              title: Text(label),
+              trailing: selectedValue.value == item
+                  ? Icon(Icons.check, color: Colors.blue)
+                  : null,
+              onTap: () {
+                selectedValue.value = item;
+                Get.back();
+              },
+            );
+          }).toList(),
+        );
+      },
     );
   }
 
-
+  // void _showParameterPicker(BuildContext context) {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,19 +95,86 @@ class MyRecordPage extends StatelessWidget {
                     Expanded(
                       child: InkWell(
                         onTap: () => _showYearPicker(context),
-                        child: dropdownBox("বছর নির্বাচন করুন", selectionController.selectedYear.value.toString()),
+                        child: dropdownBox("বছর নির্বাচন করুন", controller.selectedYear.value.toString()),
                       ),
                     ),
                     SizedBox(width: 12),
                     Expanded(
                       child: InkWell(
-                        onTap: () => _showParameterPicker(context),
-                        child: dropdownBox("প্যারামিটার নির্বাচন করুন", selectionController.selectedParameter.value),
+                        onTap: () => _showBottomSheet<ParameterEntity>(
+                          context,
+                          dashboardController.parameters,
+                          controller.selectedParameter,
+                              (item) => item.title,
+                        ),
+                        child: dropdownBox("প্যারামিটার নির্বাচন করুন", controller.selectedParameter.value?.title ?? ''),
                       ),
                     ),
                   ],
                 )),
                 SizedBox(height: 16),
+                Divider(),
+                Obx(() {
+                  final grouped = controller.groupedRecordsByDate;
+
+                  if (grouped.isEmpty) {
+                    return Expanded( // wrap this too!
+                      child: Center(
+                        child: Text('No records found', style: TextStyle(fontSize: 16)),
+                      ),
+                    );
+                  }
+
+                  return Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.all(0),
+                      children: grouped.entries.map((entry) {
+                        final date = entry.key;
+                        final records = entry.value;
+                        final isSynced = records.every((e) => e.isSynced);
+                        final isExpanded = _expandedDates.contains(date);
+
+                        return Card(
+                          margin: EdgeInsets.only(bottom: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          color: Colors.grey.shade50,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  date,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  isExpanded ? Icons.expand_less : Icons.expand_more,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    if (isExpanded) {
+                                      _expandedDates.remove(date);
+                                    } else {
+                                      _expandedDates.add(date);
+                                    }
+                                  });
+                                },
+                              ),
+                              if (isExpanded) ...[
+                                _buildTableHeader(),
+                                ...records.map((record) => _buildRecordRow(record, records.indexOf(record), records.length)),
+                              ],
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                })
               ],
             ),
           ),
@@ -120,4 +208,116 @@ class MyRecordPage extends StatelessWidget {
     );
   }
 
+
+  Widget _buildTableHeader() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: Colors.blue),
+        color: Colors.blue.shade50,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Time',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'Measurement',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'Status',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecordRow(RecordEntity record, int index, int totalRecords) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(color: Colors.blue),
+          top: BorderSide(color: Colors.blue),
+          right: BorderSide(color: Colors.blue),
+          bottom: BorderSide(
+            color: Colors.blue,
+            width: index == totalRecords - 1 ? 1.0 : 0.0, // Only show bottom border for last item
+          ),
+        ),
+        borderRadius: index == totalRecords - 1
+            ? BorderRadius.only(
+          bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        )
+            : null,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              record.time,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              "${record.measurement} মিমি",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  record.isSynced ? Icons.check_circle : Icons.sync_problem,
+                  color: record.isSynced ? Colors.green : Colors.orange,
+                  size: 18,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  record.isSynced ? 'Synced' : 'Pending',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: record.isSynced ? Colors.green : Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
