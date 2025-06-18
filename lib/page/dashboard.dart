@@ -12,8 +12,10 @@ import '../controller/dashboard/DashboardController.dart';
 class DashboardPage extends StatelessWidget {
   final String username = "Sadakatul ajam Shakil";
   final DashboardController controller = Get.put(DashboardController());
+
   @override
   Widget build(BuildContext context) {
+    controller.onRefresh();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(

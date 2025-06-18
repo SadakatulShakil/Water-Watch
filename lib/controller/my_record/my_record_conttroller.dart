@@ -23,6 +23,7 @@ class MyRecordController extends GetxController {
 
   @override
   void onInit() {
+    print("Initializing MyRecordController");
     final dashboard = Get.find<DashboardController>();
     if (dashboard.parameters.isNotEmpty) {
       selectedParameter.value = dashboard.parameters.first;

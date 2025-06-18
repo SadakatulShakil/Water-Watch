@@ -27,7 +27,7 @@ class NavigationView extends GetView<NavigationController> {
           ),
         ),
       ),
-      body: Obx(()=> controller.screen.elementAt(controller.currentTab.value))
+      body: Obx(() => controller.currentScreen),
     );
   }
 

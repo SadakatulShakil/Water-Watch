@@ -189,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             enabled: false,
                             style: TextStyle(color: Colors.black87),
                             decoration: InputDecoration(
-                              label: Text('Mobile', style: TextStyle(color: AppColors().app_primary)),
+                              label: Text('Mobile (view only)', style: TextStyle(color: AppColors().app_primary)),
                               enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                               disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors().app_primary)),

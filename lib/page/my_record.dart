@@ -67,6 +67,7 @@ class _MyRecordPageState extends State<MyRecordPage> {
 
   @override
   Widget build(BuildContext context) {
+    controller.loadRecords();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -128,7 +129,6 @@ class _MyRecordPageState extends State<MyRecordPage> {
                       children: grouped.entries.map((entry) {
                         final date = entry.key;
                         final records = entry.value;
-                        final isSynced = records.every((e) => e.isSynced);
                         final isExpanded = _expandedDates.contains(date);
 
                         return Card(
