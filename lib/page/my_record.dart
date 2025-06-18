@@ -224,7 +224,7 @@ class _MyRecordPageState extends State<MyRecordPage> {
         children: [
           Expanded(
             child: Text(
-              'Time',
+              'time'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -233,7 +233,7 @@ class _MyRecordPageState extends State<MyRecordPage> {
           ),
           Expanded(
             child: Text(
-              'Measurement',
+              'measurement'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -243,7 +243,7 @@ class _MyRecordPageState extends State<MyRecordPage> {
           ),
           Expanded(
             child: Text(
-              'Status',
+              'station'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -300,16 +300,10 @@ class _MyRecordPageState extends State<MyRecordPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  record.isSynced ? Icons.check_circle : Icons.sync_problem,
-                  color: record.isSynced ? Colors.green : Colors.orange,
-                  size: 18,
-                ),
-                SizedBox(width: 4),
                 Text(
-                  record.isSynced ? 'Synced' : 'Pending',
+                  record.locationName,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     color: record.isSynced ? Colors.green : Colors.orange,
                   ),
                 ),

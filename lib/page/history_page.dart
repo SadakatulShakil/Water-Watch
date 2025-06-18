@@ -142,7 +142,7 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           Expanded(
             child: Text(
-              'Time',
+              'time'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -151,7 +151,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
           Expanded(
             child: Text(
-              'Measurement',
+              'measurement'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -161,7 +161,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
           Expanded(
             child: Text(
-              'Status',
+              'status'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,

@@ -85,6 +85,10 @@ class LocalizationString extends Translations {
       'notification': 'Notification',
       'alert': 'Alert',
       'normal': 'Normal',
+      'time': 'Time',
+      'measurement': 'Measurement',
+      'station': 'Station',
+      'status': 'Status',
     },
     'bn_BD': {
       'title': 'LandSlide Report',
@@ -167,6 +171,10 @@ class LocalizationString extends Translations {
       'notification': 'নোটিফিকেশন',
       'alert': 'সতর্কতা',
       'normal': 'সাধারণ',
+      'time': 'সময়',
+      'measurement': 'পরিমাপ',
+      'station': 'স্টেশন',
+      'status': 'অবস্থা',
     }
   };
 }
