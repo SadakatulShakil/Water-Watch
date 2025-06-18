@@ -17,6 +17,7 @@ class MyRecordController extends GetxController {
 
   void selectYear(int year) {
     selectedYear.value = year;
+    loadRecords();
     Get.back();
   }
 
@@ -38,7 +39,7 @@ class MyRecordController extends GetxController {
     super.onInit();
   }
 
-  /// Load all records from DB for this station + selected parameter
+  /// Load all records from DB for the year + selected parameter
   Future<void> loadRecords() async {
     if (selectedParameter.value == null) return;
 

@@ -20,7 +20,6 @@ class _MyRecordPageState extends State<MyRecordPage> {
   final _expandedDates = <String>{};
 
   void _showYearPicker(BuildContext context) {
-    final controller = Get.find<MyRecordController>();
     showModalBottomSheet(
       context: context,
       builder: (_) => ListView.builder(
@@ -66,7 +65,6 @@ class _MyRecordPageState extends State<MyRecordPage> {
     );
   }
 
-  // void _showParameterPicker(BuildContext context) {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,7 +122,6 @@ class _MyRecordPageState extends State<MyRecordPage> {
                       ),
                     );
                   }
-
                   return Expanded(
                     child: ListView(
                       padding: const EdgeInsets.all(0),
@@ -139,7 +136,7 @@ class _MyRecordPageState extends State<MyRecordPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          color: Colors.grey.shade50,
+                          color: Colors.grey.shade100,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -297,17 +294,15 @@ class _MyRecordPageState extends State<MyRecordPage> {
             ),
           ),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  record.locationName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: record.isSynced ? Colors.green : Colors.orange,
-                  ),
-                ),
-              ],
+            child: Text(
+              record.locationName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontSize: 14,
+                color: record.isSynced ? Colors.green : Colors.orange,
+              ),
             ),
           ),
         ],
