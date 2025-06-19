@@ -108,10 +108,15 @@ class _MyRecordPageState extends State<MyRecordPage> {
                           context,
                           dashboardController.parameters,
                           controller.selectedParameter,
-                              (item) => item.title,
+                              (item) => Get.locale?.languageCode == 'bn'
+                                  ?item.titleBn
+                                  :item.title,
                               (item) => item.id,
                         ),
-                        child: dropdownBox("প্যারামিটার নির্বাচন করুন", controller.selectedParameter.value?.title ?? ''),
+                        child: dropdownBox("প্যারামিটার নির্বাচন করুন",
+                            Get.locale?.languageCode == 'bn'
+                            ?controller.selectedParameter.value?.titleBn ?? ''
+                            :controller.selectedParameter.value?.title ?? ''),
                       ),
                     ),
                   ],

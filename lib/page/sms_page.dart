@@ -52,19 +52,25 @@ class _SmsPageState extends State<SmsPage> {
                           context,
                           dashboardController.locations,
                           controller.selectedStation,
-                              (item) => item.title,
+                              (item) => Get.locale?.languageCode == 'bn'
+                                  ?item.titleBn
+                                  :item.title,
                               (item) => item.id,
                         ),
                       ),
                       SizedBox(height: 12),
                       buildDropdown(
                         title: "প্যারামিটার নির্বাচন করুন",
-                        value: controller.selectedParameter.value?.title ?? '',
+                        value: Get.locale?.languageCode == 'bn'
+                            ?controller.selectedParameter.value?.titleBn ?? ''
+                            :controller.selectedParameter.value?.title ?? '',
                         onTap: () => _showBottomSheet<ParameterEntity>(
                           context,
                           dashboardController.parameters,
                           controller.selectedParameter,
-                              (item) => item.title,
+                              (item) => Get.locale?.languageCode == 'bn'
+                                  ?item.titleBn
+                                  :item.title,
                               (item) => item.id,
                         ),
                       ),

@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart' as lottie;
 import 'package:water_watch/database_helper/entity/local_location_entity.dart';
 import 'package:water_watch/models/location_model.dart';
+import 'package:water_watch/page/notification_page.dart';
 import 'package:water_watch/page/station_report_page.dart';
 
 import '../controller/add_record/add_record_binding.dart';
@@ -46,27 +47,33 @@ class DashboardPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.notifications_none, color: Colors.black87),
-                        ),
-                        Positioned(
-                          top: 4,
-                          right: 4,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(NotificationPage(),
+                          transition: Transition.rightToLeft);
+                      },
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.notifications_none, color: Colors.black87),
                           ),
-                        )
-                      ],
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -140,14 +147,17 @@ class DashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(location.subtitle,
+            Text(Get.locale?.languageCode == 'bn'
+                ? location.subtitleBn
+                : location.subtitle,
                 style: TextStyle(fontSize: 13, color: Colors.black54)),
             Spacer(),
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    location.title,
+                  child: Text(Get.locale?.languageCode == 'bn'
+                    ?location.titleBn
+                    : location.title,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),

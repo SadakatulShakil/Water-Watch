@@ -100,9 +100,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `LocationEntity` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `LocationEntity` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `titleBn` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `subtitleBn` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `ParameterEntity` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `ParameterEntity` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `titleBn` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `record_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `locationId` TEXT NOT NULL, `locationName` TEXT NOT NULL, `parameterId` TEXT NOT NULL, `parameterName` TEXT NOT NULL, `measurement` TEXT NOT NULL, `image1Path` TEXT NOT NULL, `image2Path` TEXT, `image3Path` TEXT, `isSynced` INTEGER NOT NULL)');
 
@@ -139,7 +139,9 @@ class _$LocationDao extends LocationDao {
             (LocationEntity item) => <String, Object?>{
                   'id': item.id,
                   'title': item.title,
-                  'subtitle': item.subtitle
+                  'titleBn': item.titleBn,
+                  'subtitle': item.subtitle,
+                  'subtitleBn': item.subtitleBn
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -156,7 +158,9 @@ class _$LocationDao extends LocationDao {
         mapper: (Map<String, Object?> row) => LocationEntity(
             id: row['id'] as String,
             title: row['title'] as String,
-            subtitle: row['subtitle'] as String));
+            titleBn: row['titleBn'] as String,
+            subtitle: row['subtitle'] as String,
+            subtitleBn: row['subtitleBn'] as String));
   }
 
   @override
@@ -174,8 +178,11 @@ class _$ParameterDao extends ParameterDao {
         _parameterEntityInsertionAdapter = InsertionAdapter(
             database,
             'ParameterEntity',
-            (ParameterEntity item) =>
-                <String, Object?>{'id': item.id, 'title': item.title});
+            (ParameterEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'title': item.title,
+                  'titleBn': item.titleBn
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -189,7 +196,9 @@ class _$ParameterDao extends ParameterDao {
   Future<List<ParameterEntity>> findAllParameters() async {
     return _queryAdapter.queryList('SELECT * FROM ParameterEntity',
         mapper: (Map<String, Object?> row) => ParameterEntity(
-            id: row['id'] as String, title: row['title'] as String));
+            id: row['id'] as String,
+            title: row['title'] as String,
+            titleBn: row['titleBn'] as String));
   }
 
   @override

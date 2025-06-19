@@ -109,10 +109,10 @@ class DashboardController extends GetxController {
       // }
       if (locations.isEmpty) {
         final fetched = [
-          LocationEntity(id: '1', title: 'শেরপুর - সিলেট', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
-          LocationEntity(id: '2', title: 'সুনামগঞ্জ', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
-          LocationEntity(id: '3', title: 'হবিগঞ্জ', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
-          LocationEntity(id: '4', title: 'মৌলভীবাজার', subtitle: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '1',title: 'Sherpur-Sylhet', titleBn: 'শেরপুর - সিলেট',subtitle: 'View & add Data', subtitleBn: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '2',title: 'Sunamganj', titleBn: 'সুনামগঞ্জ',subtitle: 'View & add Data', subtitleBn: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '3',title: 'Habiganj', titleBn: 'হবিগঞ্জ', subtitle: 'View & add Data',subtitleBn: 'তথ্য দেখুন ও যুক্ত করুন'),
+          LocationEntity(id: '4',title: 'Moulabibazar', titleBn: 'মৌলভীবাজার',subtitle: 'View & add Data', subtitleBn: 'তথ্য দেখুন ও যুক্ত করুন'),
         ];
         await dbService.saveLocations(fetched);
         locations.value = fetched;
@@ -141,8 +141,8 @@ class DashboardController extends GetxController {
       // }
       if (parameters.isEmpty) {
         final fetched = [
-          ParameterEntity(id: '1', title: 'বৃষ্টিপাত'),
-          ParameterEntity(id: '2', title: 'পানির স্তর'),
+          ParameterEntity(id: '1',title: 'Rainfall', titleBn: 'বৃষ্টিপাত'),
+          ParameterEntity(id: '2',title: 'Water Level', titleBn: 'পানির স্তর'),
         ];
         await dbService.saveParameters(fetched);
         parameters.value = fetched;
