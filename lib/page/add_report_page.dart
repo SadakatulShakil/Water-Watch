@@ -63,6 +63,7 @@ class _AddReportPageState extends State<AddReportPage> {
                           dashboardController.parameters,
                           controller.selectedParameter,
                               (item) => item.title,
+                              (item) => item.id,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -300,6 +301,7 @@ class _AddReportPageState extends State<AddReportPage> {
       List<T> items,
       Rx<T?> selectedValue,
       String Function(T) getLabel,
+      String Function(T) getId, // <-- Add this
       ) {
     showModalBottomSheet(
       context: context,
@@ -307,9 +309,12 @@ class _AddReportPageState extends State<AddReportPage> {
         return ListView(
           children: items.map((item) {
             final label = getLabel(item);
+            final isSelected = selectedValue.value != null &&
+                getId(selectedValue.value as T) == getId(item);
+
             return ListTile(
               title: Text(label),
-              trailing: selectedValue.value == item
+              trailing: isSelected
                   ? Icon(Icons.check, color: Colors.blue)
                   : null,
               onTap: () {

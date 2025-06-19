@@ -53,6 +53,7 @@ class _SmsPageState extends State<SmsPage> {
                           dashboardController.locations,
                           controller.selectedStation,
                               (item) => item.title,
+                              (item) => item.id,
                         ),
                       ),
                       SizedBox(height: 12),
@@ -64,6 +65,7 @@ class _SmsPageState extends State<SmsPage> {
                           dashboardController.parameters,
                           controller.selectedParameter,
                               (item) => item.title,
+                              (item) => item.id,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -248,6 +250,7 @@ class _SmsPageState extends State<SmsPage> {
       List<T> items,
       Rx<T?> selectedValue,
       String Function(T) getLabel,
+      String Function(T) getId, // <-- Add this
       ) {
     showModalBottomSheet(
       context: context,
@@ -255,9 +258,12 @@ class _SmsPageState extends State<SmsPage> {
         return ListView(
           children: items.map((item) {
             final label = getLabel(item);
+            final isSelected = selectedValue.value != null &&
+                getId(selectedValue.value as T) == getId(item);
+
             return ListTile(
               title: Text(label),
-              trailing: selectedValue.value == item
+              trailing: isSelected
                   ? Icon(Icons.check, color: Colors.blue)
                   : null,
               onTap: () {
@@ -270,4 +276,5 @@ class _SmsPageState extends State<SmsPage> {
       },
     );
   }
+
 }
