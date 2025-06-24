@@ -16,7 +16,7 @@ class RecordEntity {
 
   final String measurement;
 
-  final String image1Path;
+  final String? image1Path;
   final String? image2Path;
   final String? image3Path;
 
@@ -31,7 +31,7 @@ class RecordEntity {
     required this.parameterId,
     required this.parameterName,
     required this.measurement,
-    required this.image1Path,
+    this.image1Path,
     this.image2Path,
     this.image3Path,
     this.isSynced = false,

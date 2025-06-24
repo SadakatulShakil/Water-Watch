@@ -22,7 +22,7 @@ void main() async {
   // Initialize SharedPreferences
   await UserPrefService().init();
   Get.put(SettingsController());
-  final savedLang = UserPrefService().appLanguage ?? 'en';
+  final savedLang = UserPrefService().appLanguage;
   await LocationService().getLocation();
   // Initialize DBService
   final dbService = await DBService().init();

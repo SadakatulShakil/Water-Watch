@@ -89,6 +89,7 @@ class LocalizationString extends Translations {
       'measurement': 'Measurement',
       'station': 'Station',
       'status': 'Status',
+      'media': 'Media',
     },
     'bn_BD': {
       'title': 'LandSlide Report',
@@ -175,6 +176,7 @@ class LocalizationString extends Translations {
       'measurement': 'পরিমাপ',
       'station': 'স্টেশন',
       'status': 'অবস্থা',
+      'media': 'মিডিয়া',
     }
   };
 }
