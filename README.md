@@ -1,6 +1,6 @@
 # Water_Watch
 
-A simplified Mobile for a gauge reader who helps to input water level data and helpsthe  Water Development Board to process and update the alert system for flash floods in Bangladesh
+A simplified Mobile for a gauge reader who helps to input water level data and helps the  Water Development Board to process and update the alert system for flash floods in Bangladesh
 
 ## Getting Started
 
